@@ -45,6 +45,7 @@ static void MX_TIM16_Init(void);
 
 /* USER CODE BEGIN PFP */
 void TIM16_IRQHandler(void);
+void TIM16_17_IRQHandler(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -103,17 +104,25 @@ void SystemClock_Config(void)
   */
 static void MX_TIM16_Init(void)
 {
+  /* Enable peripheral clock for TIM16 */
+  __HAL_RCC_TIM16_CLK_ENABLE();
+
   htim16.Instance = TIM16;
-  htim16.Init.Prescaler =_______ // insert your psc value
+  htim16.Init.Prescaler = 7999;     // insert your psc value
   htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim16.Init.Period =_______          // insert your calculated period or ARR
+  htim16.Init.Period = 999;         // insert your calculated period or ARR
   htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim16.Init.RepetitionCounter = 0;
   htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim16) != HAL_OK) {
     Error_Handler();
   }
+
+#ifdef TIM16_17_IRQn
+  NVIC_EnableIRQ(TIM16_17_IRQn);
+#else
   NVIC_EnableIRQ(TIM16_IRQn);
+#endif
 }
 
 /**
@@ -121,7 +130,21 @@ static void MX_TIM16_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
-/*Insert PB0 initialization code*/
+  /*Insert PB0 initialization code*/
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* Enable GPIOB clock */
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+
+  /* Set initial pin state low */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);
+
+  /* Configure PB0 pin */
+  GPIO_InitStruct.Pin = GPIO_PIN_0;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 }
 
 /**
@@ -129,7 +152,20 @@ static void MX_GPIO_Init(void)
   */
 void TIM16_IRQHandler(void)
 {
-/*Toggle the pin*/
+  /*Toggle the pin*/
+  if (__HAL_TIM_GET_FLAG(&htim16, TIM_FLAG_UPDATE) != RESET)
+  {
+    __HAL_TIM_CLEAR_IT(&htim16, TIM_IT_UPDATE);
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+  }
+}
+
+/**
+  * @brief ISR Alias for STM32F0 targets where TIM16/17 share vector entry
+  */
+void TIM16_17_IRQHandler(void)
+{
+  TIM16_IRQHandler();
 }
 
 /**

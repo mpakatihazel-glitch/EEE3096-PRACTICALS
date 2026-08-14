@@ -1,0 +1,133 @@
+% EEE3096S Practical 1A report template
+% Replace [Your answer] with your own text.
+% Update the title block below with your names and student numbers.
+% Keep the section structure. Add your content under each heading.
+
+\documentclass[11pt]{article}
+
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+% To add an oscilloscope screenshot under any task, place the image file
+% in the same folder as this .tex file, then uncomment and adapt this block:
+%
+% \begin{figure}[h]
+%   \centering
+%   \includegraphics[width=0.7\textwidth]{your_image_file.png}
+%   \caption{Your caption here}
+% \end{figure}
+
+\title{\textbf{EEE3096S Practical 1A} \\ STM32 GPIO, Timers, and Interrupts}
+\author{Student Name 1, Student Number 1 \\ Student Name 2, Student Number 2}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Notes on This Template}
+This template covers every task in Practical 1A. Delete this section before you submit.
+\newline
+\newline
+Do not paste your code into this report. Your tutor views your code on GitHub. Each task carries marks for your written answers and marks for your demonstration. During your demo, your tutor asks a demo question on the spot. Know your implementation well, since you answer it without notes.
+\newline
+\newline
+Name your final PDF exactly as the practical instructs: prac\_01A\_stdnum001\_stdnum002.pdf, with both student numbers in lowercase.
+
+\section{Hardware Orientation}
+
+\begin{enumerate}
+    \item GPIO pins connected to the 8 user LEDs: [Your answer]
+    \item GPIO pins connected to the 4 push buttons: [Your answer]
+    \item Pins connected to the 8 MHz crystal: [Your answer]
+    \item Default system clock frequency using the internal HSI oscillator: [Your answer]
+    \item Purpose of the loopback header P2: [Your answer]
+\end{enumerate}
+
+\section{Task 1: Timer Configuration and Verification}
+
+\subsection{Predictions}
+Record these before you write any code or calculate any values.
+
+\begin{itemize}
+    \item System clock frequency: [Your answer]
+    \item Expected prescaler value: [Your answer]
+    \item Expected ARR value: [Your answer]
+    \item Expected interrupt period (s): [Your answer]
+\end{itemize}
+
+\subsection{Calculations}
+Show your working for the timer clock frequency and the ARR value.
+
+\begin{align*}
+    \text{Timer Clock} &= \frac{\text{System Clock}}{\text{Prescaler} + 1} = \text{[Your working]} \\[2mm]
+    \text{ARR} &= \text{[Your working]}
+\end{align*}
+
+\subsection{Measurement and Verification}
+\begin{itemize}
+    \item Measured period from the oscilloscope: [Your answer]
+    \item Comparison with your expected period: [Your answer]
+\end{itemize}
+
+\section{Task 2: LED Control with Timer Interrupt}
+Confirm your running light video is in your submission folder, or link it here: [Your answer]
+
+\section{Task 3: Button Input and Software Debounce}
+
+\subsection{Records}
+\begin{itemize}
+    \item Expected switch bounce duration: [Your answer]
+    \item Maximum bounce duration measured on the oscilloscope: [Your answer]
+    \item Chosen software debounce delay time: [Your answer]
+    \item Formula to calculate the ARR value from the desired period in milliseconds: [Your answer]
+\end{itemize}
+
+\subsection{Question 4}
+When you update the ARR register dynamically, does the timer frequency change immediately mid-cycle, or does the timer wait for the next update event? Base your answer on the STM32 timer preload register behaviour.
+
+[Your answer]
+
+\section{Task 4: Multi-Mode LED Control}
+
+\subsection{State Machine Explanation}
+Explain your state machine implementation for Mode 3. Describe the SPARKLE\_IDLE, SPARKLE\_DISPLAY, and SPARKLE\_TURN\_OFF states, and how your code moves between them.
+
+[Your answer]
+
+\subsection{Measurements}
+\begin{itemize}
+    \item Measured minimum LED-on time for Mode 3: [Your answer]
+    \item Measured maximum LED-on time for Mode 3: [Your answer]
+\end{itemize}
+
+\section{Task 5: ADC Interrupts and LED Level Meter}
+
+\subsection{Records}
+\begin{itemize}
+    \item Predicted 12-bit ADC register value, in decimal, for a 2.0 V input: [Your answer]
+    \item Measured multimeter voltage at the moment the 5th LED turns on: [Your answer]
+    \item Calculation comparing your measured voltage against the theoretical threshold: [Your answer]
+\end{itemize}
+
+\subsection{Question}
+If a student accidentally sets the signal generator to output a 5.0 V DC signal into PA5, what physical damage might occur? Consult the I/O structure column for PA5 in the STM32F051x datasheet.
+
+[Your answer]
+
+\section{Task 6: Software PWM via Timer Interrupts}
+
+\subsection{Records}
+\begin{itemize}
+    \item Calculated Timer Prescaler and ARR values for exactly 10 kHz: [Your answer]
+    \item Measured total period of the signal: [Your answer]
+    \item Measured positive pulse width: [Your answer]
+\end{itemize}
+
+\subsection{Question}
+A project requires a 50 Hz signal with a duty cycle resolution of 1 percent. What is the exact timer interrupt frequency required? Show your calculation.
+
+[Your answer]
+
+\end{document}
